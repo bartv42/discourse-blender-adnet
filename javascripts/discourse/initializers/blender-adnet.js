@@ -96,6 +96,8 @@ export default {
   name: "blender-friends",
 
   initialize() {
+    // eslint-disable-next-line no-console
+    console.log("[BF] init, inline:", INLINE_ENABLED, "freq:", INLINE_FREQUENCY);
     withPluginApi("0.8", (api) => {
       api.onPageChange(() => {
         document
@@ -124,6 +126,8 @@ export default {
           // betrouwbaarder dan data-post-number dat niet altijd aanwezig is
           const allCooked = Array.from(document.querySelectorAll(".cooked"));
           const index = allCooked.indexOf(el) + 1; // 1-based
+          // eslint-disable-next-line no-console
+          console.log("[BF] cooked index:", index);
           if (index <= 0 || index % INLINE_FREQUENCY !== 0) return;
 
           // Zoek de post-container om na te injecteren

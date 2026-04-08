@@ -152,6 +152,14 @@ export default {
                 const wrapper = document.createElement("div");
                 wrapper.className = "blender-friends-inline-wrapper";
 
+                const header = document.createElement("a");
+                header.className = "blender-friends-inline-header";
+                header.href = "https://friends.blendernation.com/";
+                header.target = "_blank";
+                header.rel = "noopener noreferrer";
+                header.textContent = "Friends of Blender Artists";
+                wrapper.appendChild(header);
+
                 const link = document.createElement("a");
                 link.className = "blender-friends-inline-link";
                 link.href = data.click_url;
@@ -160,6 +168,7 @@ export default {
 
                 const img = document.createElement("img");
                 img.className = "blender-friends-inline-image";
+                img.loading = "lazy";
                 img.src = data.image_url;
                 img.alt = data.product_name;
                 img.title = data.product_name;

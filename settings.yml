@@ -1,0 +1,19 @@
+publisher_id:
+  type: integer
+  default: 2
+  description: "Blender Adnet publisher ID"
+
+ad_category:
+  type: string
+  default: ""
+  description: "Optionele categoriefilter (bijv. 'add-ons'). Leeg = geen filter."
+
+inline_ads_enabled:
+  type: bool
+  default: true
+  description: "Toon ads tussen posts (inline)"
+
+inline_ad_frequency:
+  type: integer
+  default: 10
+  description: "Toon een inline ad na elke N posts (bijv. 10)"

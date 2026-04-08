@@ -1,0 +1,112 @@
+// ────────────────────────────────────────────────────────────────────────────
+// Blender Friends – ad boven de timeline
+// ────────────────────────────────────────────────────────────────────────────
+
+// De hoogte van de ad wordt via JS als custom property gezet:
+//   --blender-ad-height: <Npx>
+// De timeline-scrollarea trekt die hoogte van zijn beschikbare ruimte af.
+
+:root {
+  --blender-ad-height: 0px;
+}
+
+// Verklein de scrollbare tijdlijn zodat hij altijd volledig zichtbaar blijft
+.timeline-scrollarea-wrapper,
+.timeline-scrollarea {
+  max-height: calc(
+    100vh
+    - var(--header-offset, 60px)
+    - var(--blender-ad-height)
+    - 2rem   // onderste witruimte
+  ) !important;
+}
+
+// ── Ad wrapper ───────────────────────────────────────────────────────────────
+
+.blender-friends-wrapper {
+  display: block;
+  box-sizing: border-box;
+  max-width: 300px;
+  margin-left: -90px;
+  margin-top: -20px;
+  padding-bottom: 0.5rem;
+  margin-bottom: 0.5rem;
+  border-bottom: 1px solid var(--primary-low);
+}
+
+.blender-friends-placeholder {
+  min-height: 0;
+}
+
+// ── Ad inhoud ────────────────────────────────────────────────────────────────
+
+.blender-friends-ad {
+  display: block;
+}
+
+.blender-friends-link {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  box-sizing: border-box;
+  gap: 0.35rem;
+  text-decoration: none;
+  color: var(--primary);
+
+  &:hover .blender-friends-image {
+    opacity: 0.85;
+  }
+}
+
+.blender-friends-image {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 4px;
+  transition: opacity 0.15s ease;
+}
+
+.blender-friends-label {
+  font-size: 0.8em;
+  color: var(--primary-medium);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+// ── Inline post-ads ──────────────────────────────────────────────────────────
+
+.blender-friends-inline-wrapper {
+  width: 285px;
+  margin-top: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--primary-low);
+}
+
+.blender-friends-inline-link {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  text-decoration: none;
+  color: var(--primary);
+
+  &:hover .blender-friends-inline-image {
+    opacity: 0.85;
+  }
+}
+
+.blender-friends-inline-image {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 4px;
+  transition: opacity 0.15s ease;
+}
+
+.blender-friends-inline-label {
+  font-size: 0.8em;
+  color: var(--primary-medium);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

@@ -122,57 +122,58 @@ export default {
           const el = element instanceof Element ? element : element?.[0];
           if (!el) return;
 
-          // Bepaal post-index door .cooked elementen te tellen —
-          // betrouwbaarder dan data-post-number dat niet altijd aanwezig is
-          const allCooked = Array.from(document.querySelectorAll(".cooked"));
-          const index = allCooked.indexOf(el) + 1; // 1-based
-          // eslint-disable-next-line no-console
-          console.log("[BF] cooked index:", index);
-          if (index <= 0 || index % INLINE_FREQUENCY !== 0) return;
+          // decorateCooked vuurt vóór het element in de DOM zit —
+          // wacht tot afterRender zodat querySelectorAll het element vindt
+          schedule("afterRender", () => {
+            const allCooked = Array.from(document.querySelectorAll(".cooked"));
+            const index = allCooked.indexOf(el) + 1; // 1-based
+            // eslint-disable-next-line no-console
+            console.log("[BF] cooked index:", index);
+            if (index <= 0 || index % INLINE_FREQUENCY !== 0) return;
 
-          // Zoek de post-container om na te injecteren
-          const postContainer =
-            el.closest("article") ||
-            el.closest(".topic-post") ||
-            el.parentElement;
-          if (!postContainer) return;
+            const postContainer =
+              el.closest("article") ||
+              el.closest(".topic-post") ||
+              el.parentElement;
+            if (!postContainer) return;
 
-          // Voorkom dubbele injectie
-          if (
-            postContainer.nextElementSibling?.classList.contains(
-              "blender-friends-inline-wrapper"
+            // Voorkom dubbele injectie
+            if (
+              postContainer.nextElementSibling?.classList.contains(
+                "blender-friends-inline-wrapper"
+              )
             )
-          )
-            return;
+              return;
 
-          fetchAdInline()
-            .then((data) => {
-              if (data.error) return;
+            fetchAdInline()
+              .then((data) => {
+                if (data.error) return;
 
-              const wrapper = document.createElement("div");
-              wrapper.className = "blender-friends-inline-wrapper";
+                const wrapper = document.createElement("div");
+                wrapper.className = "blender-friends-inline-wrapper";
 
-              const link = document.createElement("a");
-              link.className = "blender-friends-inline-link";
-              link.href = data.click_url;
-              link.target = "_blank";
-              link.rel = "noopener noreferrer";
+                const link = document.createElement("a");
+                link.className = "blender-friends-inline-link";
+                link.href = data.click_url;
+                link.target = "_blank";
+                link.rel = "noopener noreferrer";
 
-              const img = document.createElement("img");
-              img.className = "blender-friends-inline-image";
-              img.src = data.image_url;
-              img.alt = data.product_name;
-              img.title = data.product_name;
+                const img = document.createElement("img");
+                img.className = "blender-friends-inline-image";
+                img.src = data.image_url;
+                img.alt = data.product_name;
+                img.title = data.product_name;
 
-              const label = document.createElement("span");
-              label.className = "blender-friends-inline-label";
-              label.textContent = data.product_name;
+                const label = document.createElement("span");
+                label.className = "blender-friends-inline-label";
+                label.textContent = data.product_name;
 
-              link.append(img, label);
-              wrapper.append(link);
-              postContainer.insertAdjacentElement("afterend", wrapper);
-            })
-            .catch(() => {});
+                link.append(img, label);
+                wrapper.append(link);
+                postContainer.insertAdjacentElement("afterend", wrapper);
+              })
+              .catch(() => {});
+          });
         }, { id: "blender-friends-inline" });
       }
     });

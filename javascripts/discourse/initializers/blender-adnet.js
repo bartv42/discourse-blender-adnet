@@ -10,7 +10,6 @@ const INLINE_ENABLED =
 const INLINE_FREQUENCY =
   typeof settings !== "undefined" ? settings.inline_ad_frequency : 10;
 
-// Zoek de timeline container — dekt zowel oude als nieuwe Discourse versies
 const TIMELINE_SELECTOR = [
   ".topic-timeline-container",
   ".timeline-container",
@@ -97,8 +96,6 @@ export default {
   name: "blender-friends",
 
   initialize() {
-    // eslint-disable-next-line no-console
-    console.log("[BlenderFriends] initialize, INLINE_ENABLED:", INLINE_ENABLED, "FREQ:", INLINE_FREQUENCY);
     withPluginApi("0.8", (api) => {
       api.onPageChange(() => {
         document
@@ -121,31 +118,24 @@ export default {
       if (INLINE_ENABLED) {
         api.decorateCooked((element) => {
           const el = element instanceof Element ? element : element?.[0];
-          // eslint-disable-next-line no-console
-          console.log("[BlenderFriends] decorateCooked fired, el:", el?.tagName, el?.className);
           if (!el) return;
 
-          // Log parent chain om data-post-number te vinden
-          let _p = el.parentElement, _d = 0;
-          while (_p && _d < 8) {
-            // eslint-disable-next-line no-console
-            console.log(`[BlenderFriends] parent[${_d}]`, _p.tagName, _p.id, _p.className.slice(0,40), JSON.stringify(_p.dataset).slice(0,80));
-            _p = _p.parentElement; _d++;
-          }
+          // Bepaal post-index door .cooked elementen te tellen —
+          // betrouwbaarder dan data-post-number dat niet altijd aanwezig is
+          const allCooked = Array.from(document.querySelectorAll(".cooked"));
+          const index = allCooked.indexOf(el) + 1; // 1-based
+          if (index <= 0 || index % INLINE_FREQUENCY !== 0) return;
 
-          const article = el.closest("[data-post-number]");
-          // eslint-disable-next-line no-console
-          console.log("[BlenderFriends] article:", article?.dataset?.postNumber);
-          if (!article) return;
+          // Zoek de post-container om na te injecteren
+          const postContainer =
+            el.closest("article") ||
+            el.closest(".topic-post") ||
+            el.parentElement;
+          if (!postContainer) return;
 
-          const postNumber = parseInt(article.dataset.postNumber, 10);
-          // eslint-disable-next-line no-console
-          console.log("[BlenderFriends] postNumber:", postNumber, "FREQ:", INLINE_FREQUENCY, "match:", postNumber % INLINE_FREQUENCY === 0);
-          if (!postNumber || postNumber % INLINE_FREQUENCY !== 0) return;
-
-          // Voorkom dubbele injectie: check het element ná het article
+          // Voorkom dubbele injectie
           if (
-            article.nextElementSibling?.classList.contains(
+            postContainer.nextElementSibling?.classList.contains(
               "blender-friends-inline-wrapper"
             )
           )
@@ -176,8 +166,7 @@ export default {
 
               link.append(img, label);
               wrapper.append(link);
-              // Injecteer NA het article, buiten Discourse's virtual DOM
-              article.insertAdjacentElement("afterend", wrapper);
+              postContainer.insertAdjacentElement("afterend", wrapper);
             })
             .catch(() => {});
         }, { id: "blender-friends-inline" });

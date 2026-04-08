@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(//home/bart/Documents/Claude/**)",
+      "Bash(rm -f discourse-friends.zip)",
+      "Bash(zip -r discourse-friends.zip discourse-friends/)",
+      "Bash(cd:*)",
+      "Bash(zip -r discourse-friends.zip discourse-friends/ -x \"discourse-friends/.claude/*\" \"discourse-friends/.claude\")",
+      "Bash(git init:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git:*)"
+    ]
+  }
+}

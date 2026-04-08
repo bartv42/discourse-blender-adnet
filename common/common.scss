@@ -122,15 +122,8 @@
 .blender-friends-inline-label {
   padding: 0.5rem 0.65rem;
   font-size: 0.85em;
-  font-weight: 600;
   color: var(--primary);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-
-  &::after {
-    content: " →";
-    opacity: 0.5;
-    font-weight: 400;
-  }
 }

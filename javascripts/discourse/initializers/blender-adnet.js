@@ -184,7 +184,12 @@ export default {
 
             Promise.all(fetches)
               .then((results) => {
-                const ads = results.filter((d) => !d.error);
+                const seen = new Set();
+                const ads = results.filter((d) => {
+                  if (d.error || seen.has(d.product_id)) return false;
+                  seen.add(d.product_id);
+                  return true;
+                });
                 if (ads.length === 0) return;
                 injectInlineAds(ads, postContainer);
               })

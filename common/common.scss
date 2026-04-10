@@ -82,7 +82,7 @@
   padding: 1.25rem 0.75rem 0.75rem;
   border: 2px solid #e8740c;
   border-radius: 8px;
-  background: var(--primary-very-low);
+  background: var(--secondary);
 }
 
 .blender-friends-inline-pill {
@@ -106,7 +106,7 @@
 
 .blender-friends-inline-grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(3, 1fr);
   gap: 0.5rem;
 }
 
@@ -135,6 +135,7 @@
 .blender-friends-inline-label {
   padding: 0.4rem 0.5rem;
   font-size: 0.8em;
+  text-align: center;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;

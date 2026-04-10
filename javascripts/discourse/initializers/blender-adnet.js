@@ -179,7 +179,7 @@ export default {
             )
               return;
 
-            const count = window.innerWidth <= 600 ? 1 : 2;
+            const count = window.innerWidth <= 600 ? 1 : 3;
             const fetches = Array.from({ length: count }, () => fetchAdInline());
 
             Promise.all(fetches)

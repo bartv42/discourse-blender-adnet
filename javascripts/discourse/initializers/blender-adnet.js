@@ -84,6 +84,47 @@ function injectAd(ad) {
   updateHeightVar(wrapper);
 }
 
+function injectInlineAds(ads, postContainer) {
+  const wrapper = document.createElement("div");
+  wrapper.className = "blender-friends-inline-wrapper";
+
+  const pill = document.createElement("a");
+  pill.className = "blender-friends-inline-pill";
+  pill.href = "https://friends.blendernation.com/";
+  pill.target = "_blank";
+  pill.rel = "noopener noreferrer";
+  pill.textContent = "Friends of Blender Artists";
+  wrapper.appendChild(pill);
+
+  const grid = document.createElement("div");
+  grid.className = "blender-friends-inline-grid";
+
+  ads.forEach((ad) => {
+    const card = document.createElement("a");
+    card.className = "blender-friends-inline-card";
+    card.href = ad.click_url;
+    card.target = "_blank";
+    card.rel = "noopener noreferrer";
+
+    const img = document.createElement("img");
+    img.className = "blender-friends-inline-image";
+    img.loading = "lazy";
+    img.src = ad.image_url;
+    img.alt = ad.product_name;
+    img.title = ad.product_name;
+
+    const label = document.createElement("span");
+    label.className = "blender-friends-inline-label";
+    label.textContent = ad.product_name;
+
+    card.append(img, label);
+    grid.appendChild(card);
+  });
+
+  wrapper.appendChild(grid);
+  postContainer.insertAdjacentElement("afterend", wrapper);
+}
+
 function updateHeightVar(el) {
   const height = el ? el.offsetHeight : 0;
   document.documentElement.style.setProperty(
@@ -96,8 +137,6 @@ export default {
   name: "blender-friends",
 
   initialize() {
-    // eslint-disable-next-line no-console
-    console.log("[BF] init, inline:", INLINE_ENABLED, "freq:", INLINE_FREQUENCY);
     withPluginApi("0.8", (api) => {
       api.onPageChange(() => {
         document
@@ -122,13 +161,9 @@ export default {
           const el = element instanceof Element ? element : element?.[0];
           if (!el) return;
 
-          // decorateCooked vuurt vóór het element in de DOM zit —
-          // wacht tot afterRender zodat querySelectorAll het element vindt
           schedule("afterRender", () => {
             const allCooked = Array.from(document.querySelectorAll(".cooked"));
-            const index = allCooked.indexOf(el) + 1; // 1-based
-            // eslint-disable-next-line no-console
-            console.log("[BF] cooked index:", index);
+            const index = allCooked.indexOf(el) + 1;
             if (index <= 0 || index % INLINE_FREQUENCY !== 0) return;
 
             const postContainer =
@@ -137,7 +172,6 @@ export default {
               el.parentElement;
             if (!postContainer) return;
 
-            // Voorkom dubbele injectie
             if (
               postContainer.nextElementSibling?.classList.contains(
                 "blender-friends-inline-wrapper"
@@ -145,41 +179,14 @@ export default {
             )
               return;
 
-            fetchAdInline()
-              .then((data) => {
-                if (data.error) return;
+            const count = window.innerWidth <= 600 ? 1 : 3;
+            const fetches = Array.from({ length: count }, () => fetchAdInline());
 
-                const wrapper = document.createElement("div");
-                wrapper.className = "blender-friends-inline-wrapper";
-
-                const header = document.createElement("a");
-                header.className = "blender-friends-inline-header";
-                header.href = "https://friends.blendernation.com/";
-                header.target = "_blank";
-                header.rel = "noopener noreferrer";
-                header.textContent = "Friends of Blender Artists";
-                wrapper.appendChild(header);
-
-                const link = document.createElement("a");
-                link.className = "blender-friends-inline-link";
-                link.href = data.click_url;
-                link.target = "_blank";
-                link.rel = "noopener noreferrer";
-
-                const img = document.createElement("img");
-                img.className = "blender-friends-inline-image";
-                img.loading = "lazy";
-                img.src = data.image_url;
-                img.alt = data.product_name;
-                img.title = data.product_name;
-
-                const label = document.createElement("span");
-                label.className = "blender-friends-inline-label";
-                label.textContent = data.product_name;
-
-                link.append(img, label);
-                wrapper.append(link);
-                postContainer.insertAdjacentElement("afterend", wrapper);
+            Promise.all(fetches)
+              .then((results) => {
+                const ads = results.filter((d) => !d.error);
+                if (ads.length === 0) return;
+                injectInlineAds(ads, postContainer);
               })
               .catch(() => {});
           });

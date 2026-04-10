@@ -77,53 +77,70 @@
 // ── Inline post-ads ──────────────────────────────────────────────────────────
 
 .blender-friends-inline-wrapper {
-  width: 285px;
-  margin: 0.5rem auto 1.5rem;
-  border: 1px solid var(--primary-low);
+  position: relative;
+  margin: 1.5rem 0 0.5rem;
+  padding: 1.25rem 0.75rem 0.75rem;
+  border: 2px solid #e8740c;
   border-radius: 8px;
-  overflow: hidden;
-  background: var(--secondary);
 }
 
-.blender-friends-inline-header {
-  display: block;
-  padding: 0.4rem 0.65rem;
-  background: var(--primary-low);
+.blender-friends-inline-pill {
+  position: absolute;
+  top: -0.75rem;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #e8740c;
+  color: #fff;
   font-size: 0.75em;
   font-weight: 600;
-  color: var(--primary-medium);
+  padding: 0.2rem 0.85rem;
+  border-radius: 1rem;
+  white-space: nowrap;
   text-decoration: none;
 
   &:hover {
-    color: var(--primary);
+    background: #cf6610;
   }
 }
 
-.blender-friends-inline-link {
+.blender-friends-inline-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.5rem;
+}
+
+.blender-friends-inline-card {
   display: flex;
   flex-direction: column;
-  gap: 0;
   text-decoration: none;
   color: var(--primary);
+  border-radius: 6px;
+  overflow: hidden;
+  background: var(--primary-very-low);
 
   &:hover .blender-friends-inline-image {
-    opacity: 0.88;
+    opacity: 0.85;
   }
 }
 
 .blender-friends-inline-image {
   display: block;
   width: 100%;
-  height: auto;
-  border-radius: 0;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
   transition: opacity 0.15s ease;
 }
 
 .blender-friends-inline-label {
-  padding: 0.5rem 0.65rem;
-  font-size: 0.85em;
-  color: var(--primary);
+  padding: 0.4rem 0.5rem;
+  font-size: 0.8em;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+@media (max-width: 600px) {
+  .blender-friends-inline-grid {
+    grid-template-columns: 1fr;
+  }
 }

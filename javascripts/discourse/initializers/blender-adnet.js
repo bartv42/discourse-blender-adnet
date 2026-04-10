@@ -41,7 +41,7 @@ function fetchAd() {
   return fetch(url, { credentials: "omit" }).then((r) => r.json());
 }
 
-function fetchAdInline() {
+function fetchAdInline(exclude = []) {
   let url = `https://friends.blendernation.com/api/v1/ad?publisher_id=${encodeURIComponent(PUBLISHER_ID)}&slot=in-stream`;
   if (AD_CATEGORY) {
     url += `&category=${encodeURIComponent(AD_CATEGORY)}`;
@@ -50,7 +50,28 @@ function fetchAdInline() {
   if (kw) {
     url += `&kw=${kw}`;
   }
+  if (exclude.length) {
+    url += `&exclude=${exclude.join(",")}`;
+  }
   return fetch(url, { credentials: "omit" }).then((r) => r.json());
+}
+
+// Haal `count` unieke ads op sequentieel, met exclude-lijst voor de API
+async function fetchUniqueInlineAds(count) {
+  const ads = [];
+  const seenIds = [];
+  for (let i = 0; i < count; i++) {
+    try {
+      const data = await fetchAdInline(seenIds);
+      if (!data.error && !seenIds.includes(data.product_id)) {
+        ads.push(data);
+        seenIds.push(data.product_id);
+      }
+    } catch (_) {
+      // netwerk-error voor deze slot: ga door met wat we al hebben
+    }
+  }
+  return ads;
 }
 
 function injectAd(ad) {
@@ -180,20 +201,10 @@ export default {
               return;
 
             const count = window.innerWidth <= 600 ? 1 : 3;
-            const fetches = Array.from({ length: count }, () => fetchAdInline());
-
-            Promise.all(fetches)
-              .then((results) => {
-                const seen = new Set();
-                const ads = results.filter((d) => {
-                  if (d.error || seen.has(d.product_id)) return false;
-                  seen.add(d.product_id);
-                  return true;
-                });
-                if (ads.length === 0) return;
-                injectInlineAds(ads, postContainer);
-              })
-              .catch(() => {});
+            fetchUniqueInlineAds(count).then((ads) => {
+              if (ads.length === 0) return;
+              injectInlineAds(ads, postContainer);
+            });
           });
         }, { id: "blender-friends-inline" });
       }

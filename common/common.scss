@@ -82,18 +82,19 @@
   padding: 1.25rem 0.75rem 0.75rem;
   border: 2px solid #e8740c;
   border-radius: 8px;
+  background: var(--primary-very-low);
 }
 
 .blender-friends-inline-pill {
   position: absolute;
-  top: -0.75rem;
+  top: -1.1rem;
   left: 50%;
   transform: translateX(-50%);
   background: #e8740c;
   color: #fff !important;
-  font-size: 0.75em;
+  font-size: 0.8em;
   font-weight: 600;
-  padding: 0.2rem 0.85rem;
+  padding: 0.3rem 1rem;
   border-radius: 1rem;
   white-space: nowrap;
   text-decoration: none;
@@ -137,6 +138,7 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  background: var(--primary-low);
 }
 
 @media (max-width: 600px) {

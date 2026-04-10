@@ -121,6 +121,11 @@ function injectInlineAds(ads, postContainer) {
 
   const grid = document.createElement("div");
   grid.className = "blender-friends-inline-grid";
+  grid.style.gridTemplateColumns = `repeat(${ads.length}, minmax(0, 1fr))`;
+  if (ads.length < 3 && window.innerWidth > 600) {
+    grid.style.maxWidth = `${Math.round((ads.length / 3) * 100)}%`;
+    grid.style.margin = "0 auto";
+  }
 
   ads.forEach((ad) => {
     const card = document.createElement("a");

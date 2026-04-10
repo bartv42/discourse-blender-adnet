@@ -9,6 +9,8 @@ const INLINE_ENABLED =
   typeof settings !== "undefined" ? settings.inline_ads_enabled : true;
 const INLINE_FREQUENCY =
   typeof settings !== "undefined" ? settings.inline_ad_frequency : 10;
+const SUPPRESS_GROUPS =
+  typeof settings !== "undefined" ? settings.suppress_for_groups : "";
 
 const TIMELINE_SELECTOR = [
   ".topic-timeline-container",
@@ -146,6 +148,19 @@ function injectInlineAds(ads, postContainer) {
   postContainer.insertAdjacentElement("afterend", wrapper);
 }
 
+function isUserSuppressed(api) {
+  if (!SUPPRESS_GROUPS) return false;
+  const currentUser = api.getCurrentUser();
+  if (!currentUser) return false;
+  const suppressList = SUPPRESS_GROUPS.split(/[|,]/)
+    .map((g) => g.trim().toLowerCase())
+    .filter(Boolean);
+  const userGroups = (currentUser.groups || []).map((g) =>
+    (g.name || "").toLowerCase()
+  );
+  return suppressList.some((g) => userGroups.includes(g));
+}
+
 function updateHeightVar(el) {
   const height = el ? el.offsetHeight : 0;
   document.documentElement.style.setProperty(
@@ -159,6 +174,8 @@ export default {
 
   initialize() {
     withPluginApi("0.8", (api) => {
+      if (isUserSuppressed(api)) return;
+
       api.onPageChange(() => {
         document
           .querySelectorAll(".blender-friends-wrapper")

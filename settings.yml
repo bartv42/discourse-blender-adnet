@@ -17,3 +17,8 @@ inline_ad_frequency:
   type: integer
   default: 10
   description: "Toon een inline ad na elke N posts (bijv. 10)"
+
+suppress_for_groups:
+  type: group_list
+  default: ""
+  description: "Verberg alle ads (sidebar + inline) voor leden van deze groepen. Leeg = iedereen ziet ads."

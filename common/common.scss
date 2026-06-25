@@ -39,6 +39,11 @@
   display: block;
   width: 100%;
   height: auto;
+  // Cap de hoogte zodat vierkante/staande banners niet de hele gutter vullen.
+  // object-fit: contain houdt de aspect-ratio intact (geen bijsnijden/vervormen);
+  // bredere banners blijven gewoon de volledige breedte vullen.
+  max-height: 250px;
+  object-fit: contain;
   border-radius: 4px;
   transition: opacity 0.15s ease;
 }

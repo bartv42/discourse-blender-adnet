@@ -22,22 +22,40 @@
   margin-bottom: 0.5rem;
   border-bottom: 1px solid var(--primary-low);
   position: relative;
-  // Snelle terugweg (hover-out); de vertraging bij hover-in staat op :hover.
-  transition: transform 0.15s ease;
-  transition-delay: 0s;
+  // Dekkende, thema-bewuste achtergrond zodat de onderliggende post-tekst er
+  // niet doorheen schijnt wanneer de ad naar buiten popt.
+  background: var(--secondary);
 }
 
 // Hover pop-out — alleen op desktop met een echte hover-pointer (niet op touch).
-// Schaal en vertraging komen via CSS-variabelen uit de settings (met fallback).
+// Alleen de afbeelding schaalt (de titel blijft even groot); schaal en
+// vertraging komen via CSS-variabelen uit de settings (met fallback).
 @media (hover: hover) {
-  .desktop-view .blender-friends-wrapper.is-hoverable:hover {
-    transform: scale(var(--blender-hover-scale, 1.6));
-    transform-origin: top right;
-    transition-delay: var(--blender-hover-delay, 150ms);
-    z-index: 1000;
+  .desktop-view .blender-friends-wrapper.is-hoverable .blender-friends-image {
+    position: relative;
+    // Hover-out: krimp direct met dezelfde easing/duur; z-index pas ná de
+    // animatie loslaten, anders duikt de ad halverwege achter de content
+    // (de "rare sprong").
+    transition:
+      transform 0.2s ease-in-out 0s,
+      box-shadow 0.2s ease-in-out 0s,
+      z-index 0s linear 0.2s;
   }
 
-  // Toon de volledige titel wanneer de ad vergroot is.
+  .desktop-view .blender-friends-wrapper.is-hoverable:hover .blender-friends-image {
+    transform: scale(var(--blender-hover-scale, 1.6));
+    // Groei naar links-boven (weg van de titel eronder), verankerd rechtsonder.
+    transform-origin: bottom right;
+    z-index: 1000;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
+    // Hover-in: vertraagd starten, verder identiek aan hover-out (symmetrisch).
+    transition:
+      transform 0.2s ease-in-out var(--blender-hover-delay, 150ms),
+      box-shadow 0.2s ease-in-out var(--blender-hover-delay, 150ms),
+      z-index 0s linear var(--blender-hover-delay, 150ms);
+  }
+
+  // Toon de volledige titel wanneer de ad vergroot is (titel schaalt niet mee).
   .desktop-view .blender-friends-wrapper.is-hoverable:hover .blender-friends-label {
     white-space: normal;
   }
@@ -53,10 +71,6 @@
   gap: 0.35rem;
   text-decoration: none;
   color: var(--primary);
-
-  &:hover .blender-friends-image {
-    opacity: 0.85;
-  }
 }
 
 .blender-friends-image {
@@ -69,7 +83,9 @@
   max-height: 250px;
   object-fit: contain;
   border-radius: 4px;
-  transition: opacity 0.15s ease;
+  // Dekkende ondergrond achter de afbeelding: voorkomt dat post-tekst door
+  // (deels transparante) creatives heen schijnt wanneer de ad naar buiten popt.
+  background: var(--secondary);
 }
 
 .blender-friends-label {

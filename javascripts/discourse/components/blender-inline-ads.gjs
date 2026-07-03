@@ -46,12 +46,25 @@ export default class BlenderInlineAds extends Component {
     return window.innerWidth <= 600 ? 1 : 3;
   }
 
+  get hoverEnabled() {
+    return typeof settings !== "undefined" ? settings.inline_hover_enabled : false;
+  }
+
   get gridStyle() {
     const cols = this.ads.length;
     let style = `grid-template-columns: repeat(${cols}, minmax(0, 1fr));`;
     // Centreer het grid wanneer er minder dan 3 ads terugkomen (desktop).
     if (cols > 0 && cols < 3 && window.innerWidth > 600) {
       style += `max-width: ${Math.round((cols / 3) * 100)}%; margin: 0 auto;`;
+    }
+    // Geef de configureerbare hover-schaal/-vertraging door via CSS-variabelen.
+    if (this.hoverEnabled) {
+      const pct =
+        typeof settings !== "undefined" ? settings.hover_scale_pct : 160;
+      const delay =
+        typeof settings !== "undefined" ? settings.hover_delay_ms : 150;
+      const scale = (pct > 0 ? pct : 100) / 100;
+      style += `--blender-hover-scale: ${scale}; --blender-hover-delay: ${delay}ms;`;
     }
     return htmlSafe(style);
   }
@@ -77,7 +90,11 @@ export default class BlenderInlineAds extends Component {
           rel="noopener noreferrer"
         >Friends of Blender Artists</a>
 
-        <div class="blender-friends-inline-grid" style={{this.gridStyle}}>
+        <div
+          class="blender-friends-inline-grid
+            {{if this.hoverEnabled 'is-hoverable'}}"
+          style={{this.gridStyle}}
+        >
           {{#each this.ads as |ad|}}
             <a
               class="blender-friends-inline-card"

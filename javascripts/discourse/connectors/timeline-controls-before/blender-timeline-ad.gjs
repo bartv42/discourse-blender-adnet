@@ -42,9 +42,9 @@ export default class BlenderTimelineAd extends Component {
   // custom properties. Schaal staat als percentage in de settings (160 = 1,6x).
   get hoverStyle() {
     const pct =
-      typeof settings !== "undefined" ? settings.timeline_hover_scale_pct : 160;
+      typeof settings !== "undefined" ? settings.hover_scale_pct : 160;
     const delay =
-      typeof settings !== "undefined" ? settings.timeline_hover_delay_ms : 150;
+      typeof settings !== "undefined" ? settings.hover_delay_ms : 150;
     const scale = (pct > 0 ? pct : 100) / 100;
     return htmlSafe(
       `--blender-hover-scale: ${scale}; --blender-hover-delay: ${delay}ms;`

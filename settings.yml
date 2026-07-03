@@ -33,12 +33,17 @@ timeline_hover_enabled:
   default: true
   description: "Enlarge the timeline ad on hover (desktop only)"
 
-timeline_hover_scale_pct:
+inline_hover_enabled:
+  type: bool
+  default: true
+  description: "Enlarge in-stream ads on hover (desktop only)"
+
+hover_scale_pct:
   type: integer
   default: 160
-  description: "Hover enlargement of the timeline ad, as a percentage (160 = 1.6x). Only applies when hover enlargement is enabled."
+  description: "Hover enlargement of ads, as a percentage (160 = 1.6x). Applies to both timeline and in-stream hover."
 
-timeline_hover_delay_ms:
+hover_delay_ms:
   type: integer
   default: 150
-  description: "Delay before the hover effect starts, in milliseconds (prevents accidental enlargement)."
+  description: "Delay before the hover effect starts, in milliseconds (prevents accidental enlargement). Applies to both timeline and in-stream hover."

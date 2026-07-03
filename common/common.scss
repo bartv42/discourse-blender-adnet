@@ -60,11 +60,6 @@
       box-shadow 0.2s ease-in-out var(--blender-hover-delay, 150ms),
       z-index 0s linear var(--blender-hover-delay, 150ms);
   }
-
-  // Toon de volledige titel wanneer de ad vergroot is (titel schaalt niet mee).
-  .desktop-view .blender-friends-wrapper.is-hoverable .blender-friends-image:hover ~ .blender-friends-label {
-    white-space: normal;
-  }
 }
 
 // ── Ad inhoud ────────────────────────────────────────────────────────────────
@@ -146,12 +141,10 @@
   text-decoration: none;
   color: var(--primary);
   border-radius: 6px;
-  overflow: hidden;
+  // Geen overflow:hidden: dat zou de geschaalde afbeelding bij hover afsnijden.
+  // De ronde hoeken zetten we daarom op de afbeelding en het label zelf.
   background: var(--primary-very-low);
-
-  &:hover .blender-friends-inline-image {
-    opacity: 0.85;
-  }
+  position: relative;
 }
 
 .blender-friends-inline-image {
@@ -159,7 +152,9 @@
   width: 100%;
   aspect-ratio: 16 / 9;
   object-fit: cover;
-  transition: opacity 0.15s ease;
+  border-radius: 6px 6px 0 0;
+  // Dekkende ondergrond zodat post-tekst er niet doorheen schijnt bij pop-out.
+  background: var(--secondary);
 }
 
 .blender-friends-inline-label {
@@ -170,6 +165,36 @@
   overflow: hidden;
   text-overflow: ellipsis;
   background: var(--primary-low);
+  border-radius: 0 0 6px 6px;
+}
+
+// Hover pop-out voor inline-ads — zelfde patroon als de timeline-ad.
+// Alleen de afbeelding schaalt (titel blijft ongewijzigd, geen reflow eronder);
+// desktop + echte hover-pointer. Trigger op de afbeelding zelf (geen flikker).
+@media (hover: hover) {
+  .desktop-view
+    .blender-friends-inline-grid.is-hoverable
+    .blender-friends-inline-image {
+    position: relative;
+    // Origin in beide staten gelijk, anders verspringt hij bij hover-out.
+    transform-origin: top right;
+    transition:
+      transform 0.2s ease-in-out 0s,
+      box-shadow 0.2s ease-in-out 0s,
+      z-index 0s linear 0.2s;
+  }
+
+  .desktop-view
+    .blender-friends-inline-grid.is-hoverable
+    .blender-friends-inline-image:hover {
+    transform: scale(var(--blender-hover-scale, 1.6));
+    z-index: 1000;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
+    transition:
+      transform 0.2s ease-in-out var(--blender-hover-delay, 150ms),
+      box-shadow 0.2s ease-in-out var(--blender-hover-delay, 150ms),
+      z-index 0s linear var(--blender-hover-delay, 150ms);
+  }
 }
 
 @media (max-width: 600px) {

@@ -21,6 +21,26 @@
   padding-bottom: 0.5rem;
   margin-bottom: 0.5rem;
   border-bottom: 1px solid var(--primary-low);
+  position: relative;
+  // Snelle terugweg (hover-out); de vertraging bij hover-in staat op :hover.
+  transition: transform 0.15s ease;
+  transition-delay: 0s;
+}
+
+// Hover pop-out — alleen op desktop met een echte hover-pointer (niet op touch).
+// Schaal en vertraging komen via CSS-variabelen uit de settings (met fallback).
+@media (hover: hover) {
+  .desktop-view .blender-friends-wrapper.is-hoverable:hover {
+    transform: scale(var(--blender-hover-scale, 1.6));
+    transform-origin: top right;
+    transition-delay: var(--blender-hover-delay, 150ms);
+    z-index: 1000;
+  }
+
+  // Toon de volledige titel wanneer de ad vergroot is.
+  .desktop-view .blender-friends-wrapper.is-hoverable:hover .blender-friends-label {
+    white-space: normal;
+  }
 }
 
 // ── Ad inhoud ────────────────────────────────────────────────────────────────

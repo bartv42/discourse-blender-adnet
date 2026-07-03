@@ -2,6 +2,7 @@ import Component from "@glimmer/component";
 import { tracked } from "@glimmer/tracking";
 import { registerDestructor } from "@ember/destroyable";
 import { service } from "@ember/service";
+import { htmlSafe } from "@ember/template";
 import { fetchAd, isUserSuppressed } from "../../lib/blender-adnet-api";
 
 // Sidebar-ad boven de timeline-scrollarea.
@@ -31,6 +32,25 @@ export default class BlenderTimelineAd extends Component {
     return isUserSuppressed(this.currentUser);
   }
 
+  get hoverEnabled() {
+    return typeof settings !== "undefined"
+      ? settings.timeline_hover_enabled
+      : true;
+  }
+
+  // Geeft de configureerbare hover-schaal en -vertraging door aan de CSS via
+  // custom properties. Schaal staat als percentage in de settings (160 = 1,6x).
+  get hoverStyle() {
+    const pct =
+      typeof settings !== "undefined" ? settings.timeline_hover_scale_pct : 160;
+    const delay =
+      typeof settings !== "undefined" ? settings.timeline_hover_delay_ms : 150;
+    const scale = (pct > 0 ? pct : 100) / 100;
+    return htmlSafe(
+      `--blender-hover-scale: ${scale}; --blender-hover-delay: ${delay}ms;`
+    );
+  }
+
   startRotation() {
     const seconds =
       typeof settings !== "undefined" ? settings.timeline_rotation_seconds : 0;
@@ -58,7 +78,11 @@ export default class BlenderTimelineAd extends Component {
 
   <template>
     {{#if this.ad}}
-      <div class="blender-friends-wrapper">
+      <div
+        class="blender-friends-wrapper
+          {{if this.hoverEnabled 'is-hoverable'}}"
+        style={{this.hoverStyle}}
+      >
         <a
           class="blender-friends-link"
           href={{this.ad.click_url}}

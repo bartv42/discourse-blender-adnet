@@ -1,29 +1,44 @@
 publisher_id:
   type: integer
   default: 2
-  description: "Blender Adnet publisher ID"
+  description: "Blender AdNet publisher ID"
 
 ad_category:
   type: string
   default: ""
-  description: "Optionele categoriefilter (bijv. 'add-ons'). Leeg = geen filter."
+  description: "Optional category filter (e.g. 'add-ons'). Empty = no filter."
 
 inline_ads_enabled:
   type: bool
   default: true
-  description: "Toon ads tussen posts (inline)"
+  description: "Show ads between posts (inline)"
 
 inline_ad_frequency:
   type: integer
   default: 10
-  description: "Toon een inline ad na elke N posts (bijv. 10)"
+  description: "Show an inline ad after every N posts (e.g. 10)"
 
 suppress_for_groups:
   type: string
   default: ""
-  description: "Verberg alle ads voor leden van deze groepen. Komma-gescheiden groepsnamen, bijv: trust_level_4,admins"
+  description: "Hide all ads for members of these groups. Comma-separated group names, e.g. trust_level_4,admins"
 
 timeline_rotation_seconds:
   type: integer
   default: 45
-  description: "Ververs de timeline-ad elke N seconden zolang het topic open is (0 = niet verversen)"
+  description: "Refresh the timeline ad every N seconds while the topic is open (0 = no refresh)"
+
+timeline_hover_enabled:
+  type: bool
+  default: true
+  description: "Enlarge the timeline ad on hover (desktop only)"
+
+timeline_hover_scale_pct:
+  type: integer
+  default: 160
+  description: "Hover enlargement of the timeline ad, as a percentage (160 = 1.6x). Only applies when hover enlargement is enabled."
+
+timeline_hover_delay_ms:
+  type: integer
+  default: 150
+  description: "Delay before the hover effect starts, in milliseconds (prevents accidental enlargement)."

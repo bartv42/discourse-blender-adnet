@@ -33,6 +33,9 @@
 @media (hover: hover) {
   .desktop-view .blender-friends-wrapper.is-hoverable .blender-friends-image {
     position: relative;
+    // Origin in BEIDE staten gelijk, anders snapt hij bij hover-out van
+    // top-right naar center en verspringt de afbeelding vóór het krimpen.
+    transform-origin: top right;
     // Hover-out: krimp direct met dezelfde easing/duur; z-index pas ná de
     // animatie loslaten, anders duikt de ad halverwege achter de content
     // (de "rare sprong").
@@ -48,8 +51,7 @@
   // bij het terugschalen.
   .desktop-view .blender-friends-wrapper.is-hoverable .blender-friends-image:hover {
     transform: scale(var(--blender-hover-scale, 1.6));
-    // Verankerd rechtsboven: groeit naar links-onder, de content in.
-    transform-origin: top right;
+    // (transform-origin staat in de basisregel zodat beide staten gelijk zijn)
     z-index: 1000;
     box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
     // Hover-in: vertraagd starten, verder identiek aan hover-out (symmetrisch).

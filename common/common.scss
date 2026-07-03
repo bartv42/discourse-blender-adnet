@@ -101,7 +101,7 @@
 
 .blender-friends-inline-wrapper {
   position: relative;
-  margin: 1.5rem 0 0.5rem;
+  margin: 1.5rem 0;
   padding: 1.25rem 0.75rem 0.75rem;
   border: 2px solid #e8740c;
   border-radius: 8px;
@@ -176,8 +176,9 @@
     .blender-friends-inline-grid.is-hoverable
     .blender-friends-inline-image {
     position: relative;
-    // Origin in beide staten gelijk, anders verspringt hij bij hover-out.
-    transform-origin: top right;
+    // Vergroot vanuit het midden van de afbeelding. Origin in beide staten
+    // gelijk, anders verspringt hij bij hover-out.
+    transform-origin: center;
     transition:
       transform 0.2s ease-in-out 0s,
       box-shadow 0.2s ease-in-out 0s,

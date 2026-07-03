@@ -94,7 +94,6 @@ export default class BlenderTimelineAd extends Component {
             referrerpolicy="no-referrer"
             src={{this.ad.image_url}}
             alt={{this.ad.product_name}}
-            title={{this.ad.product_name}}
           />
           <span class="blender-friends-label">{{this.ad.product_name}}</span>
         </a>

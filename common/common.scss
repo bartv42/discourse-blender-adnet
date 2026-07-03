@@ -42,10 +42,14 @@
       z-index 0s linear 0.2s;
   }
 
-  .desktop-view .blender-friends-wrapper.is-hoverable:hover .blender-friends-image {
+  // Trigger op de afbeelding zélf (niet de wrapper): een geschaalde afbeelding
+  // wordt op zijn zichtbare oppervlak geraakt, dus hit-area == wat je ziet.
+  // Zo geen gat tussen trigger en zichtbaar element → geen flikker/oscillatie
+  // bij het terugschalen.
+  .desktop-view .blender-friends-wrapper.is-hoverable .blender-friends-image:hover {
     transform: scale(var(--blender-hover-scale, 1.6));
-    // Groei naar links-boven (weg van de titel eronder), verankerd rechtsonder.
-    transform-origin: bottom right;
+    // Verankerd rechtsboven: groeit naar links-onder, de content in.
+    transform-origin: top right;
     z-index: 1000;
     box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
     // Hover-in: vertraagd starten, verder identiek aan hover-out (symmetrisch).
@@ -56,7 +60,7 @@
   }
 
   // Toon de volledige titel wanneer de ad vergroot is (titel schaalt niet mee).
-  .desktop-view .blender-friends-wrapper.is-hoverable:hover .blender-friends-label {
+  .desktop-view .blender-friends-wrapper.is-hoverable .blender-friends-image:hover ~ .blender-friends-label {
     white-space: normal;
   }
 }

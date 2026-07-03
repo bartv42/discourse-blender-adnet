@@ -90,7 +90,6 @@ export default class BlenderInlineAds extends Component {
                 referrerpolicy="no-referrer"
                 src={{ad.image_url}}
                 alt={{ad.product_name}}
-                title={{ad.product_name}}
               />
               <span
                 class="blender-friends-inline-label"
